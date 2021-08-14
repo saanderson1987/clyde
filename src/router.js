@@ -16,7 +16,12 @@ const router = new Router();
 router.use(handleError)
 
 router.get('/rhinoceros', (ctx, next) => {
-  ctx.response.body = { rhinoceroses: Rhinoceros.getAll() };
+  const { query } = ctx.request;
+  ctx.response.body = { 
+    rhinoceroses: Object.keys(query).length 
+      ? Rhinoceros.getByQuery(query) 
+      : Rhinoceros.getAll() 
+    };
 });
 
 router.get('/rhinoceros/:id', (ctx, next) => {

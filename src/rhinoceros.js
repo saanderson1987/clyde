@@ -5,9 +5,9 @@ const {
   RHINOCEROS: {
     SPECIES_SET,
     VALID_NEW_RHINO_PARAMS_SET,
+    VALID_GET_BY_QUERY_PARAMS_SET
   } 
 } = require('./constants')
-
 
 const validateNewRhino = (newRhino) => {
   const { name, species } = newRhino || {};
@@ -33,6 +33,15 @@ const validateNewRhino = (newRhino) => {
   return true;
 };
 
+const validateGetByQueryParams = (query) => {
+  if (Object.keys(query).some((key) => !VALID_GET_BY_QUERY_PARAMS_SET.has(key))) {
+    throw new ValidationError(
+      '"name" and "species" are the only valid query parameters.',
+    );
+  }
+  return true;
+}
+
 const Rhinoceros = {
   create: data => {
     validateNewRhino(data);
@@ -48,6 +57,14 @@ const Rhinoceros = {
   getAll: () => rhinoceroses,
 
   getById: (_id) => rhinoceroses.find(({id}) => id === _id),
+
+  getByQuery: (query) => {
+    validateGetByQueryParams(query);
+    const queryKeysAndValue = Object.entries(query || {});
+    return rhinoceroses.filter((rhino) => queryKeysAndValue.every(
+      ([key, value]) => rhino[key] === value)
+    );
+  },
 };
 
 module.exports = Rhinoceros;
