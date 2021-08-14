@@ -1,14 +1,18 @@
 const Router = require('koa-router');
+const Rhinoceros = require('./rhinoceros');
+
 const router = new Router();
-const model = require('./rhinoceros');
 
 router.get('/rhinoceros', (ctx, next) => {
-  const rhinoceroses = model.getAll();
-  ctx.response.body = { rhinoceroses };
+  ctx.response.body = { rhinoceroses: Rhinoceros.getAll() };
+});
+
+router.get('/rhinoceros/:id', (ctx, next) => {
+  ctx.response.body = Rhinoceros.getById(ctx.params.id);
 });
 
 router.post('/rhinoceros', (ctx, next) => {
-  ctx.response.body = model.newRhinoceros(ctx.request.body);
+  ctx.response.body = Rhinoceros.create(ctx.request.body);
 });
 
 module.exports = router;
