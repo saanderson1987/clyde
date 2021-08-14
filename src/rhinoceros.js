@@ -56,6 +56,23 @@ const Rhinoceros = {
 
   getAll: () => rhinoceroses,
 
+  getEndangered: () => {
+    const numRhinosBySpecies = rhinoceroses.reduce((acc, { species }) => {
+      if (!acc[species]) {
+        acc[species] = 0;
+      }
+      acc[species] += 1;
+      return acc;
+    }, {});
+
+    const endangeredSpeciesSet = Object
+      .entries(numRhinosBySpecies)
+      .filter(([species, numRhinos]) => numRhinos < 3)
+      .reduce((acc, [species]) => acc.add(species), new Set());
+    
+    return rhinoceroses.filter(({species}) => endangeredSpeciesSet.has(species));
+  },
+
   getById: (_id) => rhinoceroses.find(({id}) => id === _id),
 
   getByQuery: (query) => {

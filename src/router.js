@@ -24,9 +24,15 @@ router.get('/rhinoceros', (ctx, next) => {
     };
 });
 
+router.get('/rhinoceros/endangered', (ctx, next) => {
+  ctx.response.body = Rhinoceros.getEndangered();
+});
+
 router.get('/rhinoceros/:id', (ctx, next) => {
+  console.log('hi')
   ctx.response.body = Rhinoceros.getById(ctx.params.id);
 });
+
 
 router.post('/rhinoceros', (ctx, next) => {
   ctx.response.body = Rhinoceros.create(ctx.request.body);
